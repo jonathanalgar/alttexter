@@ -2,7 +2,6 @@ name: ci
 
 on:
   push:
-    branches: main
     tags:
       - 'v*'
 
@@ -14,7 +13,7 @@ jobs:
       packages: write
 
     steps:
-      - name: Check Out Repo
+      - name: Check out repo
         uses: actions/checkout@v4.1.1
 
       - name: Login to GitHub Container Registry
@@ -24,7 +23,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5.1.0
         with:
           context: .
