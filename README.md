@@ -8,7 +8,7 @@
 
 `gpt4-vision-preview` wrapper service to batch generate alternative ('alt') text and title attributes for images defined in markdown formatted files.
 
-Exists to abstract interaction with the OpenAI and LangSmith APIs and provides a single interface for clients. Currently there is [alttexter-ghclient](github.com/jonathanalgar/alttexter-client) but I'm excited about building for VSC too.
+Exists to abstract interaction with the OpenAI and LangSmith APIs and provides a single interface for clients. Currently there is [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient) but I'm excited about building for VSC too.
 
 See OpenAPI specification for the service [here](https://app.swaggerhub.com/apis/JONATHANALGARGITHUB/alttexter/0.1).
 
