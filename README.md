@@ -1,5 +1,7 @@
 # alttexter
 
+![ci](https://github.com/jonathanalgar/alttexter/actions/workflows/build-docker.yml/badge.svg)
+
 ![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
 
 ## Overview
@@ -57,4 +59,4 @@ I was surprised how many prominent open-source projects have poor alt-text cover
 - [ ] Rate limiting at the service level.
 - [ ] Option to use [Azure OpenAI Services](https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/gpt-4-turbo-with-vision-is-now-available-on-azure-openai-service/ba-p/4008456).
 - [ ] Explore extending to multimodal models beyond OpenAI.
-- ...
+- [ ] Extend this TODO list
