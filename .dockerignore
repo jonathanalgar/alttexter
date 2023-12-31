@@ -1,0 +1,7 @@
+*__pycache__*
+launch.json
+*.ipynb
+.env
+*venv*
+
+example

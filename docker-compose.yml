@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  alttexter_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: alttexter:latest
+    ports:
+      - "${ALTTEXTER_PORT}:${ALTTEXTER_PORT}"
+    volumes:
+      - ${ALTTEXTER_CERTS_DIR}:/certs
+    environment:
+      - LANGCHAIN_PROJECT
+      - LANGCHAIN_TRACING_V2
+      - LANGCHAIN_ENDPOINT
+      - LANGCHAIN_API_KEY
+      - ALTTEXTER_TOKEN
+      - OPENAI_API_KEY
+    command: python main.py --port ${ALTTEXTER_PORT} --host ${ALTTEXTER_HOST} --certfile /certs/${ALTTEXTER_CERTFILE_NAME} --keyfile /certs/${ALTTEXTER_KEYFILE_NAME}

@@ -1,0 +1,25 @@
+{
+    "cors": {
+        "config": {
+            "allow_origins": ["*"],
+            "allow_credentials": true,
+            "allow_methods": ["POST"],
+            "allow_headers": ["Authorization", "Content-Type"],
+            "expose_headers": []
+        }
+    },
+    "security": {
+        "headers": {
+            "Strict-Transport-Security": "max-age=63072000; includeSubdomains",
+            "Content-Security-Policy": "default-src 'self'; img-src 'self' https://fastapi.tiangolo.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net blob:; connect-src 'self';",
+            "X-Content-Type-Options": "nosniff",
+            "X-Frame-Options": "DENY",
+            "X-XSS-Protection": "1; mode=block"
+        }
+    },
+    "logging": {
+        "level": "DEBUG",
+        "format": "%(levelname)s [%(asctime)s] %(message)s",
+        "datefmt": "%d-%m-%Y %H:%M:%S"
+    }
+}
