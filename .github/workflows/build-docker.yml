@@ -25,4 +25,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/outsystems/os_tk_llm_service:${{ github.ref_name }}
+          tags: ghcr.io/jonathanalgar/alttexter:${{ github.ref_name }}
