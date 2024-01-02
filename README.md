@@ -18,8 +18,6 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
 
 > When uploading images and visuals online, or in documents shared digitally, adding alt text can help people using assistive technologies to 'hear' those visuals. We aim to make sure that anyone using alt text through assistive technologies can get the same information from the description of an image as someone who relies on the visuals. Alt text often assists visually impaired people but is also used for search engine optimisation and for making sense of an image if it isn't visible or doesn't load. 
 
-I was surprised how many prominent open-source projects have poor alt-text coverage across their docs.
-
 ## Usage
 
 1. Clone the repo.
