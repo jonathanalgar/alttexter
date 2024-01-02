@@ -31,7 +31,7 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> List[Imag
         verbose=True,
         temperature=0, 
         model="gpt-4-vision-preview",
-        max_tokens=1024
+        max_tokens=4096
     )
 
     content = [
