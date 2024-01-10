@@ -53,8 +53,10 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
 
 ## TODO
 
-- [ ] Special handling for large files and images.
-- [ ] Rate limiting at the service level.
-- [ ] Option to use [Azure OpenAI Services](https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/gpt-4-turbo-with-vision-is-now-available-on-azure-openai-service/ba-p/4008456).
-- [ ] Explore extending to multimodal models beyond OpenAI.
+- [ ] Better error handling
+- [ ] Unit tests
+- [ ] Special handling for large files and images
+- [ ] Rate limiting at the service level
+- [ ] Option to use [Azure OpenAI Services](https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/gpt-4-turbo-with-vision-is-now-available-on-azure-openai-service/ba-p/4008456)
+- [ ] Explore extending to multimodal models beyond OpenAI
 - [ ] Extend this TODO list
