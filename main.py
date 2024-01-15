@@ -17,7 +17,7 @@ from schema import (AlttexterRequest, ErrorResponse, ExtendedAlttexterResponse,
                     handle_endpoint_error)
 
 # --------------------------------
-# Configuration and initalization
+# Configuration and initialization
 # --------------------------------
 
 app = FastAPI(
@@ -58,6 +58,7 @@ app.add_middleware(
     expose_headers=config['cors']['config']['expose_headers'],
 )
 
+
 @app.middleware("http")
 async def secure_headers(request: Request, call_next):
     response = await call_next(request)
@@ -67,6 +68,7 @@ async def secure_headers(request: Request, call_next):
 
 API_KEY_NAME = "X-API-Token"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False, description='API key required for authorization')
+
 
 async def get_api_key(api_key: str = Security(api_key_header)):
     correct_api_key = os.getenv("ALTTEXTER_TOKEN")
@@ -87,7 +89,7 @@ async def get_api_key(api_key: str = Security(api_key_header)):
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
     }
 )
-def alttexter_text( 
+def alttexter_text(
     request: AlttexterRequest = Body(...),
     token: str = Depends(get_api_key)
 ):
@@ -98,8 +100,8 @@ def alttexter_text(
         image_urls = request.image_urls
 
         # Preprocessing
-        if(is_valid_notebook(input_text)):
-            input_text = remove_outputs_from_notebook(input_text)
+        if (is_valid_notebook(text)):
+            text = remove_outputs_from_notebook(text)
 
         # Send to LLM
         alttexts_response, run_url = alttexter(text, images, image_urls)
@@ -113,12 +115,14 @@ def alttexter_text(
 # Check files and run service
 # --------------------------------
 
+
 def check_file_exists(file_path: str, file_type: str):
     """Ensures the SSL certificate and key files exist."""
     if not Path(file_path).exists():
         error_message = f"{file_type} '{file_path}' does not exist."
         logging.error(error_message)
         raise SystemExit(1)
+
 
 if __name__ == "__main__":
     check_file_exists(args.certfile, "SSL certificate file")

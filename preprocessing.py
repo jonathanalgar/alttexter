@@ -21,6 +21,7 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
     encoding = tiktoken.get_encoding(encoding_name)
     return len(encoding.encode(string))
 
+
 def is_valid_notebook(content):
     """
     Check if the given content is a valid Jupyter notebook.
@@ -36,6 +37,7 @@ def is_valid_notebook(content):
         return True
     except NotJSONError:
         return False
+
 
 def remove_outputs_from_notebook(notebook_content):
     """

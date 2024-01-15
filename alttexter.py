@@ -29,11 +29,10 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> List[Imag
     """
     llm = ChatOpenAI(
         verbose=True,
-        temperature=0, 
+        temperature=0,
         model="gpt-4-vision-preview",
         max_tokens=4096
     )
-
 
     content = [
         {
@@ -78,7 +77,7 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> List[Imag
         template="""You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.
 
 For each image in the article use a contextual understanding of the article text and the image itself to generate a concise alternative text and title attribute.
-        
+
 {format_instructions}""",
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
@@ -102,7 +101,7 @@ For each image in the article use a contextual understanding of the article text
         client = Client()
         with callbacks.collect_runs() as cb:
             try:
-                alttexts = llm.invoke(messages.format_messages()) 
+                alttexts = llm.invoke(messages.format_messages())
             finally:
                 # Ensure that all tracers complete their execution
                 wait_for_all_tracers()
