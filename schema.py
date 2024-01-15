@@ -11,13 +11,16 @@ class AlttexterRequest(BaseModel):
     images: dict = Field({}, description="Local images defined in markdown article encoded in base64 format.", example={"api_use_case.png": "<base64-encoded-data>", "api_function_call.png": "<base64-encoded-data>"})
     image_urls: List[str] = Field([], description="Image URLs defined in markdown article.", example=["https://github.com/langchain-ai/langchain/blob/b9636e5c987e1217afcdf83e9c311568ad50c304/docs/static/img/api_chain.png?raw=true", "https://github.com/langchain-ai/langchain/blob/b9636e5c987e1217afcdf83e9c311568ad50c304/docs/static/img/api_chain_response.png?raw=true"])
 
+
 class ImageAltText(BaseModel):
     name: str = Field(..., description="File name of the image including path or URL.")
     title: str = Field(..., description="Title of the image.")
     alt_text: str = Field(..., description="Concise alternative text for the image.")
 
+
 class AlttexterResponse(BaseModel):
     images: List[ImageAltText] = Field(..., description="A list of images.")
+
 
 class ExtendedAlttexterResponse(AlttexterResponse):
     run_url: Optional[str] = Field(None, description="LangSmith trace URL.")
@@ -51,10 +54,12 @@ class ExtendedAlttexterResponse(AlttexterResponse):
             }
         }
 
+
 class ErrorResponse(BaseModel):
     error: str = Field(..., description="A brief description of the error.")
     message: str = Field(..., description="A more detailed explanation of the error.")
     status_code: int = Field(..., description="The HTTP status code associated with the error.")
+
 
 def handle_endpoint_error(e: Exception):
     error_response = ErrorResponse(

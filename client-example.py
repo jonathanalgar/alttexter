@@ -14,9 +14,11 @@ logging.basicConfig(level=logging.INFO,
 
 SUPPORTED_IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.gif', '.webp')
 
+
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
 
 def extract_images_from_markdown(md_content):
     pattern = r'!\[(.*?)\]\((.*?)\s*(?:\"(.*?)\")?\)'
@@ -35,6 +37,7 @@ def extract_images_from_markdown(md_content):
 
     return local_images, image_urls
 
+
 def encode_local_images(images, base_dir):
     for image_path in images:
         full_image_path = os.path.join(base_dir, image_path)
@@ -43,6 +46,7 @@ def encode_local_images(images, base_dir):
             logging.info(f"Encoded image: {image_path}")
         else:
             logging.warning(f"Image not found or unsupported: {full_image_path}")
+
 
 def log_full_payload(md_content, encoded_images, image_urls):
     encoded_images_summary = {k: "<base64-encoded-data>" for k in encoded_images.keys()}
@@ -54,12 +58,14 @@ def log_full_payload(md_content, encoded_images, image_urls):
     logging.info("Complete Payload (with base64 placeholders):")
     logging.info(json.dumps(payload, indent=2))
 
+
 def log_payload_summary(encoded_images, image_urls):
     logging.info("Payload Summary:")
     logging.info(f"Total local images (encoded): {len(encoded_images)}")
     logging.info(f"Total image URLs: {len(image_urls)}")
     if len(image_urls) > 0:
         logging.info(f"Image URLs: {image_urls}")
+
 
 def send_file_to_api(md_content, encoded_images, image_urls, url, token, full_payload):
     if full_payload:
@@ -86,6 +92,7 @@ def send_file_to_api(md_content, encoded_images, image_urls, url, token, full_pa
     logging.info(f"Response received at {timestamp}")
 
     return response.text
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send markdown file to alttexter")

@@ -2,11 +2,8 @@ import logging
 import mimetypes
 import os
 import time
-from io import StringIO
 from typing import List
 
-import nbformat
-import tiktoken
 from langchain import callbacks
 from langchain.callbacks.tracers.langchain import wait_for_all_tracers
 from langchain.chat_models import ChatOpenAI
@@ -14,40 +11,9 @@ from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate
 from langchain_core.messages import HumanMessage
 from langsmith import Client
-from nbformat.reader import NotJSONError
 
 from schema import AlttexterResponse, ImageAltText
 
-
-def num_tokens_from_string(string: str, encoding_name: str) -> int:
-    encoding = tiktoken.get_encoding(encoding_name)
-    return len(encoding.encode(string))
-
-def is_valid_notebook(content):
-    try:
-        nbformat.reads(content, as_version=4)
-        return True
-    except NotJSONError:
-        return False
-
-def remove_outputs_from_notebook(notebook_content):
-    if not is_valid_notebook(notebook_content):
-        raise ValueError("The content is not a valid Jupyter Notebook")
-
-    notebook = nbformat.reads(notebook_content, as_version=4)
-
-    for cell in notebook.cells:
-        if 'outputs' in cell:
-            cell['outputs'] = []
-        if 'execution_count' in cell:
-            cell['execution_count'] = None
-
-    logging.info("Successfully removed outputs from the notebook")
-
-    output_stream = StringIO()
-    nbformat.write(notebook, output_stream)
-
-    return output_stream.getvalue()
 
 def alttexter(input_text: str, images: dict, image_urls: List[str]) -> List[ImageAltText]:
     """
@@ -63,15 +29,10 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> List[Imag
     """
     llm = ChatOpenAI(
         verbose=True,
-        temperature=0, 
+        temperature=0,
         model="gpt-4-vision-preview",
         max_tokens=4096
     )
-
-    # For very large text check if it's an ipynb and if so remove the output cells
-    if num_tokens_from_string(input_text, "cl100k_base") > 30000:
-        if(is_valid_notebook(input_text)):
-            input_text = remove_outputs_from_notebook(input_text)
 
     content = [
         {
@@ -116,7 +77,7 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> List[Imag
         template="""You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.
 
 For each image in the article use a contextual understanding of the article text and the image itself to generate a concise alternative text and title attribute.
-        
+
 {format_instructions}""",
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
@@ -140,7 +101,7 @@ For each image in the article use a contextual understanding of the article text
         client = Client()
         with callbacks.collect_runs() as cb:
             try:
-                alttexts = llm.invoke(messages.format_messages()) 
+                alttexts = llm.invoke(messages.format_messages())
             finally:
                 # Ensure that all tracers complete their execution
                 wait_for_all_tracers()
