@@ -43,7 +43,7 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
     {"images":[{"name":"api_use_case.png","title":"API Use Case Diagram","alt_text":"Diagram illustrating the use case of an LLM interacting with an external API."},{"name":"api_function_call.png","title":"API Function Call Process","alt_text":"Flowchart showing the process of an LLM formulating an API call based on a user query."},{"name":"https://github.com/langchain-ai/langchain/blob/b9636e5c987e1217afcdf83e9c311568ad50c304/docs/static/img/api_chain.png?raw=true","title":"API Request Chain Trace","alt_text":"Screenshot of a LangSmith trace showing the API request chain for generating an API URL."},{"name":"https://github.com/langchain-ai/langchain/blob/b9636e5c987e1217afcdf83e9c311568ad50c304/docs/static/img/api_chain_response.png?raw=true","title":"API Response Chain Trace","alt_text":"Screenshot of a LangSmith trace showing the API response chain for providing a natural language answer."}],"run_url":"https://smith.langchain.com/public/7596e591-559d-4ba4-b35e-58f93db6d25d/r"}
 
     ```
-    
+
 1. This is a very basic client. Check [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient) to integrate the service into your docs-as-code pipeline.
 
 ## Features
