@@ -12,8 +12,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security.api_key import APIKeyHeader
 
 from alttexter import alttexter
-from schema import (AlttexterRequest, AlttexterResponse, ErrorResponse,
-                    ExtendedAlttexterResponse, handle_endpoint_error)
+from preprocessing import is_valid_notebook, remove_outputs_from_notebook
+from schema import (AlttexterRequest, ErrorResponse, ExtendedAlttexterResponse,
+                    handle_endpoint_error)
 
 # --------------------------------
 # Configuration and initalization
@@ -96,6 +97,11 @@ def alttexter_text(
         images = request.images
         image_urls = request.image_urls
 
+        # Preprocessing
+        if(is_valid_notebook(input_text)):
+            input_text = remove_outputs_from_notebook(input_text)
+
+        # Send to LLM
         alttexts_response, run_url = alttexter(text, images, image_urls)
 
         return ExtendedAlttexterResponse(images=alttexts_response.images, run_url=run_url)
