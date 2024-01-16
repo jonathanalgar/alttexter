@@ -100,36 +100,32 @@ For each image in the article use a contextual understanding of the article text
     tracing_enabled = os.getenv("LANGCHAIN_TRACING_V2", "").lower() == "true"
     if tracing_enabled:
         client = Client()
-        with callbacks.collect_runs() as cb:
-            try:
+        try:
+            with callbacks.collect_runs() as cb:
                 alttexts = llm.invoke(messages.format_messages())
-            finally:
+
                 # Ensure that all tracers complete their execution
                 wait_for_all_tracers()
 
-            if alttexts:
-                try:
+                if alttexts:
                     # Get public URL for run
                     run_id = cb.traced_runs[0].id
                     time.sleep(2)
                     client.share_run(run_id)
                     run_url = client.read_run_shared_link(run_id)
-                except Exception as e:
-                    logging.error(f"LangSmith API error: {str(e)}")
+        except Exception as e:
+            logging.error(f"Error during LLM invocation with tracing: {str(e)}")
     else:
         try:
-            alttexts = llm(messages.format_messages())
+            alttexts = llm.invoke(messages.format_messages())
         except Exception as e:
             logging.error(f"Error during LLM invocation without tracing: {str(e)}")
-            return alttexts, run_url
 
     if alttexts:
         try:
             alttexts_parsed = parser.parse(alttexts.content)
+            return alttexts_parsed, run_url
         except Exception as e:
             logging.error(f"Error parsing LLM response: {str(e)}")
-            return alttexts, run_url
-    else:
-        return alttexts, run_url
 
-    return alttexts_parsed, run_url
+    return None, run_url
