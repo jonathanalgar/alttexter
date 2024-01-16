@@ -2,7 +2,7 @@ import logging
 import mimetypes
 import os
 import time
-from typing import List
+from typing import List, Optional, Tuple
 
 from langchain import callbacks
 from langchain.callbacks.tracers.langchain import wait_for_all_tracers
@@ -15,7 +15,8 @@ from langsmith import Client
 from schema import AlttexterResponse, ImageAltText
 
 
-def alttexter(input_text: str, images: dict, image_urls: List[str]) -> List[ImageAltText]:
+def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
+
     """
     Processes input text and images to generate alt text and title attributes.
 
@@ -119,7 +120,16 @@ For each image in the article use a contextual understanding of the article text
         try:
             alttexts = llm(messages.format_messages())
         except Exception as e:
-            raise Exception(f"Error during LLM invocation without tracing: {e}")
+            logging.error(f"Error during LLM invocation without tracing: {str(e)}")
+            return alttexts, run_url
 
-    alttexts_parsed = parser.parse(alttexts.content) if alttexts else None
+    if alttexts:
+        try:
+            alttexts_parsed = parser.parse(alttexts.content)
+        except Exception as e:
+            logging.error(f"Error parsing LLM response: {str(e)}")
+            return alttexts, run_url
+    else:
+        return alttexts, run_url
+
     return alttexts_parsed, run_url
