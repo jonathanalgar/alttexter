@@ -105,7 +105,7 @@ def alttexter_text(
 
         alttexts_response, run_url = alttexter(text, images, image_urls)
         if alttexts_response is None:
-            raise Exception("Failed to generate alt texts. Please try again later.")
+            raise Exception("Failed to generate alt texts.")
 
         return ExtendedAlttexterResponse(images=alttexts_response.images, run_url=run_url)
 
