@@ -22,7 +22,7 @@ from schema import (AlttexterRequest, ErrorResponse, ExtendedAlttexterResponse,
 
 app = FastAPI(
     title="alttexter",
-    description="`gpt4-vision-preview` wrapper service to batch generate alternative ('alt') text and title attributes for images defined in markdown formatted files.",
+    description="LLM wrapper service (currently `gpt4-vision-preview`) to batch generate alt text and title attributes for images defined in markdown formatted text.",
     version="0.1",
     cookies_secure=True
 )
