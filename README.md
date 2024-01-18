@@ -6,9 +6,9 @@
 
 ## Overview
 
-`gpt4-vision-preview` wrapper service to batch generate alternative ('alt') text and title attributes for images defined in markdown formatted files.
+LLM wrapper service (currently `gpt4-vision-preview`) to batch generate alt text and title attributes for images defined in markdown formatted text.
 
-Exists to abstract interaction with the OpenAI and LangSmith APIs and provides a single interface for clients. Currently there is [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient) but I'm excited about building for VSC too.
+Exists to abstract interaction with the LLM and LangSmith APIs and provide a single interface for clients, for example [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient).
 
 See OpenAPI specification for the service [here](https://app.swaggerhub.com/apis/JONATHANALGARGITHUB/alttexter/0.1).
 
@@ -26,7 +26,7 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
 1. Run `docker-compose up` to build and start the service.
 1. Run `python client-example.py example/apis.ipynb` to test. Expected output:
 
-    ```python
+    ```bash
     $ python client-example.py example/apis.ipynb
     Enter endpoint URL (eg. https://alttexter-prod.westeurope.cloudapp.azure.com:9100/alttexter):
     Enter ALTTEXTER_TOKEN:
@@ -41,14 +41,13 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
     INFO [30-12-2023 07:32:33] Sending payload to alttexter...
     INFO [30-12-2023 07:32:46] Response received at 30-12-2023 07:32:46
     {"images":[{"name":"api_use_case.png","title":"API Use Case Diagram","alt_text":"Diagram illustrating the use case of an LLM interacting with an external API."},{"name":"api_function_call.png","title":"API Function Call Process","alt_text":"Flowchart showing the process of an LLM formulating an API call based on a user query."},{"name":"https://github.com/langchain-ai/langchain/blob/b9636e5c987e1217afcdf83e9c311568ad50c304/docs/static/img/api_chain.png?raw=true","title":"API Request Chain Trace","alt_text":"Screenshot of a LangSmith trace showing the API request chain for generating an API URL."},{"name":"https://github.com/langchain-ai/langchain/blob/b9636e5c987e1217afcdf83e9c311568ad50c304/docs/static/img/api_chain_response.png?raw=true","title":"API Response Chain Trace","alt_text":"Screenshot of a LangSmith trace showing the API response chain for providing a natural language answer."}],"run_url":"https://smith.langchain.com/public/7596e591-559d-4ba4-b35e-58f93db6d25d/r"}
-
     ```
 
 1. This is a very basic client. Check [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient) to integrate the service into your docs-as-code pipeline.
 
 ## Features
 
-* Uses LangChain's [Pydantic parser](https://python.langchain.com/docs/modules/model_io/output_parsers/pydantic) as foundation for system prompt to reliably generate a JSON of expected format ([function calling](https://community.openai.com/t/does-the-model-gpt-4-vision-preview-have-function-calling/490197/2) will be even cooler).
+* Uses Langchain's [Pydantic parser](https://python.langchain.com/docs/modules/model_io/output_parsers/types/pydantic) as foundation for system prompt to reliably generate a JSON of expected format ([function calling](https://community.openai.com/t/does-the-model-gpt-4-vision-preview-have-function-calling/490197/2) will be even cooler).
 * Optionally integrates with LangSmith (in beta) to serve [trace URL](https://docs.smith.langchain.com/tracing/tracing-faq) for each generation.
 
 ## TODO
