@@ -8,7 +8,7 @@
 
 LLM wrapper service (currently `gpt4-vision-preview`) to batch generate alt text and title attributes for images defined in markdown formatted text.
 
-Exists to abstract interaction with the LLM and LangSmith APIs and provide a single interface for clients, for example [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient).
+Exists to abstract the LLM and LangSmith APIs and provide a single interface for clients, for example, [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient).
 
 See OpenAPI specification for the service [here](https://app.swaggerhub.com/apis/JONATHANALGARGITHUB/alttexter/0.1).
 
