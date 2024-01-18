@@ -17,7 +17,7 @@ jobs:
   alttexter-ghclient:
     runs-on: ubuntu-latest
     container: 
-      image: ghcr.io/jonathanalgar/alttexter-ghclient:v0.1
+      image: ghcr.io/jonathanalgar/alttexter-ghclient:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
