@@ -47,7 +47,7 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
 
 ## Features
 
-* Uses Langchain's [Pydantic parser](https://python.langchain.com/docs/modules/model_io/output_parsers/types/pydantic) as foundation for system prompt to reliably generate a JSON of expected format ([function calling](https://community.openai.com/t/does-the-model-gpt-4-vision-preview-have-function-calling/490197/2) will be even cooler).
+* Uses LangChain's [Pydantic parser](https://python.langchain.com/docs/modules/model_io/output_parsers/types/pydantic) as foundation for system prompt to reliably generate a JSON of expected format ([function calling](https://community.openai.com/t/does-the-model-gpt-4-vision-preview-have-function-calling/490197/2) will be even cooler).
 * Optionally integrates with LangSmith (in beta) to serve [trace URL](https://docs.smith.langchain.com/tracing/tracing-faq) for each generation.
 
 ## TODO
