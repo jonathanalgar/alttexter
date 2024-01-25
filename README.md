@@ -6,6 +6,8 @@
 
 ## Overview
 
+[![Diagram of the system architecture of the alttexter microservice, showing its integration with GitHub client](alttexter-diag.png "Altexter Architecture Diagram")](https://jonathanalgar.github.io/slides/Using%20AI%20and%20LLMs%20in%20docs-as-code%20pipelines.pdf)
+
 LLM wrapper service (currently `gpt4-vision-preview`) to batch generate alt text and title attributes for images defined in markdown formatted text.
 
 Exists to abstract the LLM and LangSmith APIs and provide a single interface for clients, for example, [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient).
