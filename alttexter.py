@@ -8,8 +8,8 @@ from langchain import callbacks
 from langchain.callbacks.tracers.langchain import wait_for_all_tracers
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import ChatPromptTemplate
-from langchain_community.chat_models import AzureChatOpenAI, ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from langsmith import Client
 
 from schema import AlttexterResponse, ImageAltText
@@ -17,12 +17,12 @@ from schema import AlttexterResponse, ImageAltText
 
 def determine_llm() -> ChatOpenAI:
     """Determine which LLM to use based on environment variables."""
-    model_env = os.getenv('ALTTEXTER_MODEL')
+    model_env = os.getenv("ALTTEXTER_MODEL")
     if model_env == 'openai':
         return ChatOpenAI(verbose=True, temperature=0, model="gpt-4-vision-preview", max_tokens=4096)
     elif model_env == 'openai_azure':
         return AzureChatOpenAI(verbose=True, temperature=0, openai_api_version="2024-02-15-preview",
-                               azure_deployment=os.getenv("AZURE_DEPLOYMENT", "vision-preview"),
+                               azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
                                model="vision-preview", max_tokens=4096)
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
