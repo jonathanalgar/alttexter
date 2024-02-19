@@ -15,6 +15,18 @@ from langsmith import Client
 from schema import AlttexterResponse, ImageAltText
 
 
+def determine_llm() -> ChatModelBase:
+    """Determine which LLM to use based on environment variables."""
+    model_env = os.getenv('ALTTEXTER_MODEL')
+    if model_env == 'openai':
+        return ChatOpenAI(verbose=True, temperature=0, model="gpt-4-vision-preview", max_tokens=4096)
+    elif model_env == 'openai_azure':
+        return AzureChatOpenAI(verbose=True, temperature=0, openai_api_version="2024-02-15-preview",
+                               azure_deployment=os.getenv("AZURE_DEPLOYMENT", "vision-preview"),
+                               model="vision-preview", max_tokens=4096)
+    else:
+        raise ValueError(f"Unsupported model specified: {model_env}")
+
 def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
 
     """
@@ -28,34 +40,12 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[Lis
     Returns:
         Tuple[AlttexterResponse, str]: Generated alt texts and optional tracing URL.
     """
-
-    if os.getenv('ALTTEXTER_MODEL') == 'openai':
-        llm = ChatOpenAI(
-            verbose=True,
-            temperature=0,
-            model="gpt-4-vision-preview",
-            max_tokens=4096
-        )
-    elif os.getenv('ALTTEXTER_MODEL') == 'openai_azure':
-        llm = AzureChatOpenAI(
-            verbose=True,
-            temperature=0,  
-            openai_api_version="2024-02-15-preview",
-            azure_deployment=os.getenv("AZURE_DEPLOYMENT", "vision-preview"),
-            model="vision-preview",
-            max_tokens=4096
-        )
-    else:
-        error_message = f"Unsupported model specified: {os.getenv('ALTTEXTER_MODEL')}"
-        raise ValueError(error_message)
+    llm = determine_llm()
 
     content = [
         {
             "type": "text",
-            "text": f"""ARTICLE:
-
-{input_text}
-            """
+            "text": f"""ARTICLE: {input_text}"""
         }
     ]
 
