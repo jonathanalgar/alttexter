@@ -6,16 +6,16 @@ from typing import List, Optional, Tuple
 
 from langchain import callbacks
 from langchain.callbacks.tracers.langchain import wait_for_all_tracers
-from langchain_community.chat_models import AzureChatOpenAI, ChatOpenAI
 from langchain.output_parsers import PydanticOutputParser
-from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate
+from langchain.prompts import ChatPromptTemplate
+from langchain_community.chat_models import AzureChatOpenAI, ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langsmith import Client
 
 from schema import AlttexterResponse, ImageAltText
 
 
-def determine_llm() -> ChatModelBase:
+def determine_llm() -> ChatOpenAI:
     """Determine which LLM to use based on environment variables."""
     model_env = os.getenv('ALTTEXTER_MODEL')
     if model_env == 'openai':
@@ -27,8 +27,8 @@ def determine_llm() -> ChatModelBase:
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
 
-def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
 
+def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
     """
     Processes input text and images to generate alt text and title attributes.
 
