@@ -15,7 +15,7 @@ class AlttexterRequest(BaseModel):
 class ImageAltText(BaseModel):
     name: str = Field(..., description="File name of the image including path or URL.")
     title: str = Field(..., description="Title of the image.")
-    alt_text: str = Field(..., description="Concise alternative text for the image.")
+    alt_text: str = Field(..., description="Concise alternative text for the image. The text should follow the Microsoft Style Guide.")
 
 
 class AlttexterResponse(BaseModel):

@@ -25,7 +25,7 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
 1. Clone the repo.
 1. Copy `.env-example` to `.env` and fill in the required env variables.
 1. Optionally edit `config.json` to customize CORS and logging.
-1. Run `docker-compose up` to build and start the service.
+1. Run `docker-compose up` (v1) or `docker compose up` (v2) to build and start the service.
 1. Run `python client-example.py example/apis.ipynb` to test. Expected output:
 
     ```bash
@@ -50,7 +50,7 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
 ## Features
 
 * Uses LangChain's [Pydantic parser](https://python.langchain.com/docs/modules/model_io/output_parsers/types/pydantic) as foundation for system prompt to reliably generate a JSON of expected format ([function calling](https://community.openai.com/t/does-the-model-gpt-4-vision-preview-have-function-calling/490197/2) will be even cooler).
-* Optionally integrates with LangSmith (in beta) to serve [trace URL](https://docs.smith.langchain.com/tracing/tracing-faq) for each generation.
+* Optionally integrates with LangSmith to serve [trace URL](https://docs.smith.langchain.com/tracing/tracing-faq) for each generation.
 
 ## TODO
 
@@ -58,6 +58,5 @@ via [gov.uk:](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how
 - [ ] Unit tests
 - [ ] Special handling for large files and images
 - [ ] Rate limiting at the service level
-- [ ] Option to use [Azure OpenAI Services](https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/gpt-4-turbo-with-vision-is-now-available-on-azure-openai-service/ba-p/4008456)
 - [ ] Explore extending to multimodal models beyond OpenAI
-- [ ] Extend this TODO list
+- [X] Option to use [Azure OpenAI Services](https://techcommunity.microsoft.com/t5/ai-azure-ai-services-blog/gpt-4-turbo-with-vision-is-now-available-on-azure-openai-service/ba-p/4008456)
