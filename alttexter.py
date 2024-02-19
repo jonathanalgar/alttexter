@@ -6,10 +6,10 @@ from typing import List, Optional, Tuple
 
 from langchain import callbacks
 from langchain.callbacks.tracers.langchain import wait_for_all_tracers
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import AzureChatOpenAI, ChatOpenAI
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from langsmith import Client
 
 from schema import AlttexterResponse, ImageAltText
@@ -28,12 +28,26 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[Lis
     Returns:
         Tuple[AlttexterResponse, str]: Generated alt texts and optional tracing URL.
     """
-    llm = ChatOpenAI(
-        verbose=True,
-        temperature=0,
-        model="gpt-4-vision-preview",
-        max_tokens=4096
-    )
+
+    if os.getenv('ALTTEXTER_MODEL') == 'openai':
+        llm = ChatOpenAI(
+            verbose=True,
+            temperature=0,
+            model="gpt-4-vision-preview",
+            max_tokens=4096
+        )
+    elif os.getenv('ALTTEXTER_MODEL') == 'openai_azure':
+        llm = AzureChatOpenAI(
+            verbose=True,
+            temperature=0,  
+            openai_api_version="2024-02-15-preview",
+            azure_deployment=os.getenv("AZURE_DEPLOYMENT", "vision-preview"),
+            model="vision-preview",
+            max_tokens=4096
+        )
+    else:
+        error_message = f"Unsupported model specified: {os.getenv('ALTTEXTER_MODEL')}"
+        raise ValueError(error_message)
 
     content = [
         {
@@ -73,20 +87,12 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[Lis
         content.append(image_entry)
 
     parser = PydanticOutputParser(pydantic_object=AlttexterResponse)
-
-    system_prompt = SystemMessagePromptTemplate.from_template(
-        template="""You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.
-
-For each image in the article use a contextual understanding of the article text and the image itself to generate a concise alternative text and title attribute.
-
-{format_instructions}""",
-        partial_variables={"format_instructions": parser.get_format_instructions()},
-    )
-
     all_image_identifiers = list(images.keys()) + image_urls
+
     messages = ChatPromptTemplate.from_messages(
         [
-            system_prompt,
+            SystemMessage(
+                content='''You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.\nFor each image in the article use a contextual understanding of the article text and the image itself to generate a concise alternative text and title attribute.\n{format_instructions}'''.format(format_instructions=parser.get_format_instructions())),
             HumanMessage(content=content),
             HumanMessage(
                 content=f"Tip: List of file names of images including their paths or URLs: {str(all_image_identifiers)}"
