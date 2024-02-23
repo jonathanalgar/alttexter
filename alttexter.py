@@ -16,17 +16,21 @@ from schema import AlttexterResponse, ImageAltText
 
 
 def determine_llm() -> ChatOpenAI:
-    """Determine which LLM to use based on environment variables."""
+    """Determine which LLM to use based on environment variable."""
     model_env = os.getenv("ALTTEXTER_MODEL")
     if model_env == 'openai':
-        return ChatOpenAI(verbose=True, temperature=0, model="gpt-4-vision-preview", max_tokens=4096)
+        return ChatOpenAI(verbose=True, 
+                          temperature=0, 
+                          model="gpt-4-vision-preview", 
+                          max_tokens=4096)
     elif model_env == 'openai_azure':
-        return AzureChatOpenAI(verbose=True, temperature=0, openai_api_version="2024-02-15-preview",
+        return AzureChatOpenAI(verbose=True, 
+                               temperature=0, openai_api_version="2024-02-15-preview",
                                azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-                               model="vision-preview", max_tokens=4096)
+                               model="vision-preview", 
+                               max_tokens=4096)
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
-
 
 def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
     """
