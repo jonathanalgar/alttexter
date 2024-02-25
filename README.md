@@ -10,7 +10,7 @@ LLM wrapper service (currently `gpt4-vision-preview`) to batch generate alt text
 
 Exists to abstract the LLM and LangSmith APIs and provide a single interface for clients, for example, [alttexter-ghclient](https://github.com/jonathanalgar/alttexter-ghclient).
 
-See OpenAPI specification for the service [here](https://app.swaggerhub.com/apis/JONATHANALGARGITHUB/alttexter/0.1).
+See OpenAPI specification for the service [here](https://app.swaggerhub.com/apis/JONATHANALGARGITHUB/alttexter/0.1). All credit to @BCapinha for the original idea behind this service and being a great collaborator in its development.
 
 ### Why?
 
