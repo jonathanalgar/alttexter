@@ -5,3 +5,4 @@ pydantic==1.10.12
 uvicorn==0.27.1
 tiktoken==0.5.2
 nbformat==5.9.2
+cairosvg==2.7.0
