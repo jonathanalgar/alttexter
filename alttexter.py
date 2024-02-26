@@ -1,9 +1,11 @@
+import base64
 import logging
 import mimetypes
 import os
 import time
 from typing import List, Optional, Tuple
 
+import cairosvg
 from langchain import callbacks
 from langchain.callbacks.tracers.langchain import wait_for_all_tracers
 from langchain.output_parsers import PydanticOutputParser
@@ -32,6 +34,19 @@ def determine_llm() -> ChatOpenAI:
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
 
+def svg_to_png_base64(svg_data):
+    """
+    Converts SVG data to PNG and returns the base64 encoded PNG image.
+
+    Args:
+        svg_data (str): The SVG data as a string.
+
+    Returns:
+        str: The base64 encoded PNG image.
+    """
+    png_data = cairosvg.svg2png(bytestring=svg_data)
+
+    return base64.b64encode(png_data).decode('utf-8')
 
 def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
     """
@@ -62,6 +77,13 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[Lis
         if not mime_type:
             logging.warning(f"Could not determine MIME type for image: {image_name}")
             continue
+
+        # Check if the MIME type is SVG, convert to PNG if true
+        if mime_type == "image/svg+xml":
+            logging.info(f"Converting SVG to PNG for image: {image_name}")
+            svg_data = base64.b64decode(base64_string)
+            base64_string = svg_to_png_base64(svg_data)
+            mime_type = "image/png"
 
         image_entry = {
             "type": "image_url",
