@@ -61,6 +61,9 @@ app.add_middleware(
 
 @app.middleware("http")
 async def secure_headers(request: Request, call_next):
+    """
+    Middleware to add secure headers to all responses.
+    """
     response = await call_next(request)
     for header, value in config['security']['headers'].items():
         response.headers[header] = value
@@ -71,6 +74,18 @@ api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False, description='
 
 
 async def get_api_key(api_key: str = Security(api_key_header)):
+    """
+    Security dependency to validate the API key provided by the client.
+
+    Args:
+        api_key (str): API key provided in the request headers.
+
+    Returns:
+        The validated API key.
+
+    Raises:
+        HTTPException: If the provided API key does not match the expected value.
+    """
     correct_api_key = os.getenv("ALTTEXTER_TOKEN")
     if api_key != correct_api_key:
         raise HTTPException(status_code=401, detail="Invalid API Token")

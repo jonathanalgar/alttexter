@@ -18,31 +18,34 @@ from schema import AlttexterResponse, ImageAltText
 def determine_llm() -> ChatOpenAI:
     """Determine which LLM to use based on environment variable."""
     model_env = os.getenv("ALTTEXTER_MODEL")
-    if model_env == 'openai':
-        return ChatOpenAI(verbose=True, 
-                          temperature=0, 
-                          model="gpt-4-vision-preview", 
+    if model_env == "openai":
+        return ChatOpenAI(verbose=True,
+                          temperature=0,
+                          model="gpt-4-vision-preview",
                           max_tokens=4096)
-    elif model_env == 'openai_azure':
-        return AzureChatOpenAI(verbose=True, 
+    elif model_env == "openai_azure":
+        return AzureChatOpenAI(verbose=True,
                                temperature=0, openai_api_version="2024-02-15-preview",
                                azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-                               model="vision-preview", 
+                               model="vision-preview",
                                max_tokens=4096)
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
+
 
 def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
     """
     Processes input text and images to generate alt text and title attributes.
 
     Args:
-        input_text (str): Article text.
-        images (dict): Base64 encoded images.
-        image_urls (List[str]): Image URLs.
+        input_text (str): The article text to provide context for image alt text generation.
+        images (dict): A dictionary of images where keys are image names and values are base64 encoded strings of the images.
+        image_urls (List[str]): A list of URLs for images to be processed.
 
     Returns:
-        Tuple[AlttexterResponse, str]: Generated alt texts and optional tracing URL.
+        Tuple[Optional[List[ImageAltText]], Optional[str]]: A tuple containing a list of ImageAltText objects and an optional tracing URL.
+        The first element is a list of alt texts and titles for each image, or None if the operation fails.
+        The second element is a URL to trace the operation, or None if tracing is disabled or fails.
     """
     llm = determine_llm()
 
@@ -86,7 +89,7 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[Lis
     messages = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content='''You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.\nFor each image in the article use a contextual understanding of the article text and the image itself to generate a concise alternative text and title attribute.\n{format_instructions}'''.format(format_instructions=parser.get_format_instructions())),
+                content="You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.\nFor each image in the article use a contextual understanding of the article text and the image itself to generate a concise alternative text and title attribute.\n{format_instructions}".format(format_instructions=parser.get_format_instructions())),
             HumanMessage(content=content),
             HumanMessage(
                 content=f"Tip: List of file names of images including their paths or URLs: {str(all_image_identifiers)}"

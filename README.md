@@ -1,6 +1,6 @@
 # alttexter
 
-![ci](https://github.com/jonathanalgar/alttexter/actions/workflows/build-docker.yml/badge.svg) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=jonathanalgar_alttexter&metric=bugs)](https://sonarcloud.io/summary/new_code?id=jonathanalgar_alttexter) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=jonathanalgar_alttexter&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jonathanalgar_alttexter) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com) ![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+![ci](https://github.com/jonathanalgar/alttexter/actions/workflows/build-docker.yml/badge.svg) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=jonathanalgar_alttexter&metric=bugs)](https://sonarcloud.io/summary/new_code?id=jonathanalgar_alttexter) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=jonathanalgar_alttexter&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jonathanalgar_alttexter) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com) ![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue)
 
 ## Overview
 

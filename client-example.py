@@ -101,8 +101,13 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    url = getpass.getpass(prompt="Enter endpoint URL (eg. https://alttexter-prod.westeurope.cloudapp.azure.com:9100/alttexter): ")
-    token = getpass.getpass(prompt="Enter ALTTEXTER_TOKEN: ")
+    url = os.getenv("ALTTEXTER_CLIENT_EXAMPLE_URL")
+    token = os.getenv("ALTTEXTER_CLIENT_EXAMPLE_TOKEN")
+
+    if not url:
+        url = getpass.getpass(prompt="Enter endpoint URL (eg. https://alttexter-prod.westeurope.cloudapp.azure.com:9100/alttexter): ")
+    if not token:
+        token = getpass.getpass(prompt="Enter ALTTEXTER_TOKEN: ")
 
     with open(args.md_file_path, 'r') as file:
         md_content = file.read()
