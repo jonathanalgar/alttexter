@@ -20,7 +20,7 @@ class ImageAltText(BaseModel):
 
 
 class AlttexterResponse(BaseModel):
-    images: List[ImageAltText] = Field(..., description="A list of images.")
+    images: List[ImageAltText] = Field(..., description="The list of images included in the request as a file.")
 
 
 class ExtendedAlttexterResponse(AlttexterResponse):
