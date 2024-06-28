@@ -11,10 +11,10 @@ services:
     volumes:
       - ${ALTTEXTER_CERTS_DIR}:/certs
     environment:
-      - LANGFUSE_TRACING
-      - LANGFUSE_PUBLIC_KEY
-      - LANGFUSE_SECRET_KEY
-      - LANGFUSE_HOST
+      - LANGCHAIN_TRACING_V2
+      - LANGCHAIN_ENDPOINT
+      - LANGCHAIN_PROJECT
+      - LANGCHAIN_API_KEY
       - ALTTEXTER_MODEL
       - OPENAI_API_KEY
       - AZURE_OPENAI_ENDPOINT
