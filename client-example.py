@@ -8,7 +8,6 @@ import re
 from datetime import datetime
 
 import requests
-import urllib3
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)s [%(asctime)s] %(message)s',

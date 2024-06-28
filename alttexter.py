@@ -2,7 +2,6 @@ import base64
 import logging
 import mimetypes
 import os
-import time
 from typing import List, Optional, Tuple
 
 import cairosvg
@@ -38,6 +37,7 @@ def determine_llm() -> ChatOpenAI:
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
 
+
 def svg_to_png_base64(svg_data):
     """
     Converts SVG data to PNG and returns the base64 encoded PNG image.
@@ -51,6 +51,7 @@ def svg_to_png_base64(svg_data):
     png_data = cairosvg.svg2png(bytestring=svg_data)
 
     return base64.b64encode(png_data).decode('utf-8')
+
 
 def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
     """
