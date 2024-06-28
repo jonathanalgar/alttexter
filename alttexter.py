@@ -115,10 +115,10 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[Lis
     messages = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
-                content="You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.\nFor each image in the article use a contextual understanding of the article text and the image itself to generate a concise alternative text and title attribute.\n{format_instructions}".format(format_instructions=parser.get_format_instructions())),
+                content="You are a world-class expert at generating concise alternative text and title attributes for images defined in technical articles written in markdown format.\nFor each image in the article that is attached to the request as a file use a contextual understanding of the article text and the image file itself to generate a concise alternative text and title attribute.\n{format_instructions}".format(format_instructions=parser.get_format_instructions())),
             HumanMessage(content=content),
             HumanMessage(
-                content=f"Tip: List of file names of images including their paths or URLs: {str(all_image_identifiers)}"
+                content=f"Tip: List of file names of images including their paths or URLs included in the request: {str(all_image_identifiers)}. Only include these files in the response."
             ),
         ]
     )
