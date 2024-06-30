@@ -26,14 +26,12 @@ def determine_llm() -> ChatOpenAI:
     if model_env == "openai":
         return ChatOpenAI(verbose=True,
                           temperature=0,
-                          model="gpt-4-vision-preview",
-                          max_tokens=4096)
+                          model="gpt-4o")
     elif model_env == "openai_azure":
         return AzureChatOpenAI(verbose=True,
                                temperature=0, openai_api_version="2024-02-15-preview",
                                azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-                               model="vision-preview",
-                               max_tokens=4096)
+                               model="gpt-4o")
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
 
