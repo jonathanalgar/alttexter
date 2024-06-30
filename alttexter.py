@@ -2,19 +2,22 @@ import base64
 import logging
 import mimetypes
 import os
-import time
 from typing import List, Optional, Tuple
 
 import cairosvg
-from langchain import callbacks
-from langchain.callbacks.tracers.langchain import wait_for_all_tracers
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
-from langsmith import Client
+from langfuse.callback import CallbackHandler
 
 from schema import AlttexterResponse, ImageAltText
+
+langfuse_handler = CallbackHandler(
+    public_key=os.getenv('LANGFUSE_PUBLIC_KEY'),
+    secret_key=os.getenv('LANGFUSE_SECRET_KEY'),
+    host=os.getenv('LANGFUSE_HOST')
+)
 
 
 def determine_llm() -> ChatOpenAI:
@@ -23,16 +26,15 @@ def determine_llm() -> ChatOpenAI:
     if model_env == "openai":
         return ChatOpenAI(verbose=True,
                           temperature=0,
-                          model="gpt-4-vision-preview",
-                          max_tokens=4096)
+                          model="gpt-4o")
     elif model_env == "openai_azure":
         return AzureChatOpenAI(verbose=True,
                                temperature=0, openai_api_version="2024-02-15-preview",
                                azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-                               model="vision-preview",
-                               max_tokens=4096)
+                               model="gpt-4o")
     else:
         raise ValueError(f"Unsupported model specified: {model_env}")
+
 
 def svg_to_png_base64(svg_data):
     """
@@ -47,6 +49,7 @@ def svg_to_png_base64(svg_data):
     png_data = cairosvg.svg2png(bytestring=svg_data)
 
     return base64.b64encode(png_data).decode('utf-8')
+
 
 def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[List[ImageAltText], Optional[str]]:
     """
@@ -122,29 +125,11 @@ def alttexter(input_text: str, images: dict, image_urls: List[str]) -> Tuple[Lis
     alttexts = None
     run_url = None
 
-    tracing_enabled = os.getenv("LANGCHAIN_TRACING_V2", "").lower() == "true"
-    if tracing_enabled:
-        client = Client()
-        try:
-            with callbacks.collect_runs() as cb:
-                alttexts = llm.invoke(messages.format_messages())
-
-                # Ensure that all tracers complete their execution
-                wait_for_all_tracers()
-
-                if alttexts:
-                    # Get public URL for run
-                    run_id = cb.traced_runs[0].id
-                    time.sleep(2)
-                    client.share_run(run_id)
-                    run_url = client.read_run_shared_link(run_id)
-        except Exception as e:
-            logging.error(f"Error during LLM invocation with tracing: {str(e)}")
+    if os.getenv("LANGFUSE_TRACING", "False"):
+        alttexts = llm.invoke(messages.format_messages(), config={"callbacks": [langfuse_handler]})
+        run_url = str(langfuse_handler.get_trace_url())
     else:
-        try:
-            alttexts = llm.invoke(messages.format_messages())
-        except Exception as e:
-            logging.error(f"Error during LLM invocation without tracing: {str(e)}")
+        alttexts = llm.invoke(messages.format_messages())
 
     if alttexts:
         try:

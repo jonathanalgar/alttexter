@@ -1,12 +1,13 @@
+import argparse
+import base64
+import getpass
 import json
+import logging
 import os
 import re
-import base64
-import logging
-import requests
-import getpass
-import argparse
 from datetime import datetime
+
+import requests
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)s [%(asctime)s] %(message)s',
@@ -67,7 +68,7 @@ def log_payload_summary(encoded_images, image_urls):
         logging.info(f"Image URLs: {image_urls}")
 
 
-def send_file_to_api(md_content, encoded_images, image_urls, url, token, full_payload):
+def send_file_to_api(md_content, encoded_images, image_urls, url, token, full_payload, verify_ssl=True):
     if full_payload:
         log_full_payload(md_content, encoded_images, image_urls)
     else:
@@ -86,7 +87,20 @@ def send_file_to_api(md_content, encoded_images, image_urls, url, token, full_pa
     }
 
     logging.info("Sending payload to alttexter...")
-    response = requests.post(url, headers=headers, data=actual_payload, timeout=120)
+    try:
+        response = requests.post(url, headers=headers, data=actual_payload, timeout=120, verify=verify_ssl)
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+    except requests.exceptions.SSLError as ssl_err:
+        if verify_ssl:
+            logging.error(f"SSL Error occurred: {ssl_err}")
+            raise
+        else:
+            logging.warning("SSL verification is disabled. Proceeding with insecure request.")
+            response = requests.post(url, headers=headers, data=actual_payload, timeout=120, verify=False)
+            response.raise_for_status()
+    except requests.exceptions.RequestException as req_err:
+        logging.error(f"An error occurred while sending the request: {req_err}")
+        raise
 
     timestamp = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
     logging.info(f"Response received at {timestamp}")
@@ -98,6 +112,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send markdown file to alttexter")
     parser.add_argument("md_file_path", help="Path to file containing markdown formatted text.")
     parser.add_argument("--full", action="store_true", help="Log the full payload instead of the summary")
+    parser.add_argument("--no-verify-ssl", action="store_true", help="Disable SSL certificate verification")
 
     args = parser.parse_args()
 
@@ -117,5 +132,10 @@ if __name__ == "__main__":
     local_images, image_urls = extract_images_from_markdown(md_content)
     encode_local_images(local_images, base_dir)
 
-    response = send_file_to_api(md_content, local_images, image_urls, url, token, args.full)
-    print(response)
+    verify_ssl = not args.no_verify_ssl
+    try:
+        response = send_file_to_api(md_content, local_images, image_urls, url, token, args.full, verify_ssl)
+        print(response)
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error occurred: {e}")
+        print(f"Failed to get a response from the server: {e}")
